@@ -1,0 +1,56 @@
+%YAML 1.2
+---
+name: QL
+file_extensions: [ql,qll]
+scope: source.QL
+contexts:
+  main:
+    - match: \b(import)[ ]
+      scope: keyword.other
+      push: qualid
+    - match: \b(boolean|date|float|int|string)\b
+      scope: storage.type
+    - match: \b(@[a-z][a-zA-Z0-9_]*)\b
+      scope: support.type
+    - match: \b(or|and|not|implies|if|then|else|=|!=|<|>|<=|>=|instanceof|+|-|*|/|%)\b
+      scope: keyword.operator
+    - match: \b(false|true)\b
+      scope: constant.language
+    - match: \b(this|result)\b
+      scope: variable.language
+    - match: '"'
+      push: string
+    - match: '//'
+      scope: punctuation.definition.comment
+      push: line_comment
+    - match: '/\*'
+      scope: punctuation.definition.comment
+      push: block_comment
+    - match: '(abstract|cache|external|final|library|noopt|private|deprecated)'
+      scope: storage.modifier
+
+  qualid:
+    - meta_scope: meta.qualid
+    - match: '[a-zA-Z0-9_.]'
+    - match: (.|\n)
+      pop: true
+
+  string:
+    - meta_scope: string.quoted.double
+    - match: '\\(\\|"|n|r|t)'
+      scope: constant.character.escape
+    - match: '(\\|\n|\t|\r)'
+      scope: invalid.illegal
+    - match: '"'
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line
+    - match: $
+      pop: true
+
+  block_comment:
+    - meta_scope: comment.block
+    - match: '\*/'
+      scope: punctuation.definition.comment
+      pop: true
