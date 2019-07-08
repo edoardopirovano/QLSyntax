@@ -3,6 +3,7 @@
 name: QL
 file_extensions: [ql,qll]
 scope: source.QL
+
 contexts:
   main:
     - match: \b(import)[ ]
@@ -16,7 +17,7 @@ contexts:
       scope: keyword.operator
     - match: \b(false|true)\b
       scope: constant.language
-    - match: \b(this|result)\b
+    - match: \b(this|result|super)\b
       scope: variable.language
     - match: '"'
       push: string
@@ -28,6 +29,31 @@ contexts:
       push: block_comment
     - match: '(abstract|cache|external|final|library|noopt|private|deprecated)'
       scope: storage.modifier
+    - match: \b(any|exists|forall|forex|none)\b
+      scope: keyword.quantifier
+    - match: \b(as|class|extends|from|import|in|module|newtype|predicate)\b
+      scope: keyword.other
+    - match: \b(asc|by|desc|order)\b
+      scope: keyword.order
+    - match: \b(avg|concat|count|max|min|rank|strictconcat|strictcount|strictsum|sum)\b
+      scope: keyword.aggregate
+    - match: \b(select|where)\b
+      scope: keyword.query
+    - match: \b_\b
+      scope: variable.language.dont-care.ql
+    - match: '::'
+      scope: punctuation.accessor
+
+    # Add highlight mismatching brackets
+    - match: \(\{
+      push: brackets
+    - match: \)\}
+      scope: invalid.illegal.stray-bracket-end
+
+  brackets:
+    - match: \)\}
+      pop: true
+    - include: main
 
   qualid:
     - meta_scope: meta.qualid
