@@ -43,6 +43,8 @@ contexts:
       scope: variable.language.dont-care.ql
     - match: '::'
       scope: punctuation.accessor
+    - match: '\b[0-9A-Za-z_]\b'
+      scope: variable.id_character
 
     # Add highlight mismatching brackets
     - match: \(\{
